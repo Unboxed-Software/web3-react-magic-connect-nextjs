@@ -1,5 +1,4 @@
 import type { Web3ReactHooks } from "@web3-react/core"
-import { Text } from "@chakra-ui/react"
 
 export function Status({
   isActivating,
@@ -11,7 +10,7 @@ export function Status({
   error?: Error
 }) {
   return (
-    <Text>
+    <div>
       {error ? (
         <>
           🔴 {error.name ?? "Error"}
@@ -24,6 +23,6 @@ export function Status({
       ) : (
         <>⚪️ Disconnected</>
       )}
-    </Text>
+    </div>
   )
 }

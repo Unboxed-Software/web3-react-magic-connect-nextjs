@@ -2,7 +2,6 @@ import type { BigNumber } from "@ethersproject/bignumber"
 import { formatEther } from "@ethersproject/units"
 import type { Web3ReactHooks } from "@web3-react/core"
 import { useEffect, useState } from "react"
-import { VStack, Text, UnorderedList, ListItem } from "@chakra-ui/react"
 
 function useBalances(
   provider?: ReturnType<Web3ReactHooks["useProvider"]>,
