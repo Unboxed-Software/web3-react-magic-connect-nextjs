@@ -45,25 +45,25 @@ export function Accounts({
   if (accounts === undefined) return null
 
   return (
-    <VStack>
-      <Text>Accounts:</Text>
-      <Text as="b">
-        {accounts.length === 0 ? (
-          "None"
-        ) : (
-          <UnorderedList style={{ margin: 0 }}>
-            {accounts.map((account, i) => (
-              <ListItem
+    <div>
+      Accounts:{" "}
+      <b>
+        {accounts.length === 0
+          ? "None"
+          : accounts?.map((account, i) => (
+              <ul
                 key={account}
-                style={{ overflow: "hidden", textOverflow: "ellipsis" }}
+                style={{
+                  margin: 0,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
               >
                 {ENSNames?.[i] ?? account}
                 {balances?.[i] ? ` (Ξ${formatEther(balances[i])})` : null}
-              </ListItem>
+              </ul>
             ))}
-          </UnorderedList>
-        )}
-      </Text>
-    </VStack>
+      </b>
+    </div>
   )
 }
