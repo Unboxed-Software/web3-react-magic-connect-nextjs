@@ -1,13 +1,11 @@
-import { Button, VStack } from "@chakra-ui/react"
+import { VStack } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
-
-import { initializeConnector } from "@web3-react/core"
-import { MagicConnect } from "web3-react-magic"
-import type { MagicConnect as MagicConnectType } from "web3-react-magic"
 
 import Web3 from "web3"
 import { contractABI } from "../lib/abi"
-import { contractAddress } from "../lib/utils"
+import { contractAddress, getName } from "../lib/utils"
+import { useWeb3React } from "@web3-react/core"
+import { MagicConnect } from "web3-react-magic"
 
 import { Status } from "../components/Status"
 import { Accounts } from "../components/Accounts"
@@ -17,53 +15,37 @@ import WalletButton from "../components/WalletButton"
 import ConnectButton from "../components/ConnectButton"
 import DisconnectButton from "../components/DisconnectButton"
 
-const [magicConnect, magicConnectHooks] = initializeConnector<MagicConnectType>(
-  (actions) =>
-    new MagicConnect({
-      actions,
-      options: {
-        apiKey: process.env.NEXT_PUBLIC_MAGICKEY,
-        networkOptions: {
-          rpcUrl: process.env.NEXT_PUBLIC_GOERLI_RPC,
-          chainId: 5,
-        },
-      },
-    })
-)
-
-const {
-  useChainId,
-  useAccounts,
-  useIsActivating,
-  useIsActive,
-  useProvider,
-  useENSNames,
-} = magicConnectHooks
-
 export default function Home() {
-  const chainId = useChainId()
-  const accounts = useAccounts()
-  const isActivating = useIsActivating()
-  const isActive = useIsActive()
-  const provider = useProvider()
-  const ENSNames = useENSNames(provider)
-
-  const [web3, setWeb3] = useState(null)
+  const {
+    connector,
+    accounts,
+    isActive,
+    ENSNames,
+    chainId,
+    isActivating,
+    provider,
+  } = useWeb3React()
 
   const [contract, setContract] = useState(null)
 
+  // Not sure how to set this up without a useEffect
   useEffect(() => {
-    if (isActive && magicConnect) {
-      //@ts-ignore
-      setWeb3(new Web3(magicConnect.magic.rpcProvider))
-    }
-  }, [isActive, magicConnect])
+    let web3 = null
 
-  useEffect(() => {
-    if (web3 && isActive && magicConnect) {
-      setContract(new web3.eth.Contract(contractABI, contractAddress))
+    if (isActive) {
+      if (connector instanceof MagicConnect) {
+        // @ts-ignore
+        web3 = new Web3(connector.magic.rpcProvider)
+      } else {
+        // TODO: How to support other connectors
+      }
     }
-  }, [web3])
+
+    if (web3) {
+      const contract = new web3.eth.Contract(contractABI, contractAddress)
+      setContract(contract)
+    }
+  }, [isActive, connector])
 
   return (
     <VStack justifyContent="center" alignItems="center" height="100vh">
@@ -71,8 +53,8 @@ export default function Home() {
       <Status isActivating={isActivating} isActive={isActive} />
       {isActive ? (
         <VStack alignItems="center" justifyContent="center">
-          <DisconnectButton magicConnect={magicConnect} />
-          <WalletButton magicConnect={magicConnect} />
+          <DisconnectButton connector={connector} />
+          <WalletButton connector={connector} />
           <MintButton
             accounts={accounts}
             contract={contract}
@@ -81,8 +63,15 @@ export default function Home() {
           <SignMessage provider={provider} accounts={accounts} />
         </VStack>
       ) : (
-        <ConnectButton magicConnect={magicConnect} />
+        <ConnectButton connector={connector} />
       )}
     </VStack>
   )
+}
+function usePriorityConnector() {
+  throw new Error("Function not implemented.")
+}
+
+function usePriorityProvider() {
+  throw new Error("Function not implemented.")
 }

@@ -1,17 +1,21 @@
 import { Button } from "@chakra-ui/react"
-import { MagicConnect } from "web3-react-magic"
 import { useState } from "react"
+import { Connector } from "@web3-react/types"
 
 type DisconnectButtonProps = {
-  magicConnect: MagicConnect
+  connector: Connector
 }
 
-const DisconnectButton = ({ magicConnect }: DisconnectButtonProps) => {
+const DisconnectButton = ({ connector }: DisconnectButtonProps) => {
   const [error, setError] = useState<Error | undefined>(undefined)
 
   const handleDisconnect = async () => {
     try {
-      await magicConnect.deactivate()
+      if (connector?.deactivate) {
+        void connector.deactivate()
+      } else {
+        void connector.resetState()
+      }
       setError(undefined)
     } catch (error) {
       setError(error)

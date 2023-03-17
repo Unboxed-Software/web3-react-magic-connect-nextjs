@@ -9,8 +9,12 @@ import {
   magicConnect,
 } from "../connectors/magic-connect"
 
-const connectors: [MetaMask | MagicConnect, Web3ReactHooks][] = [
-  [metaMask, metaMaskHooks],
+// const connectors: [MetaMask | MagicConnect, Web3ReactHooks][] = [
+//   [metaMask, metaMaskHooks],
+//   [magicConnect, magicConnectHooks],
+// ]
+
+const connectors: [MagicConnect, Web3ReactHooks][] = [
   [magicConnect, magicConnectHooks],
 ]
 

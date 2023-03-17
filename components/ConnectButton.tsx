@@ -1,17 +1,17 @@
 import { Button } from "@chakra-ui/react"
-import { MagicConnect } from "web3-react-magic"
 import { useState } from "react"
+import { Connector } from "@web3-react/types"
 
 type ConnectButtonProps = {
-  magicConnect: MagicConnect
+  connector: Connector
 }
 
-const ConnectButton = ({ magicConnect }: ConnectButtonProps) => {
+const ConnectButton = ({ connector }: ConnectButtonProps) => {
   const [error, setError] = useState<Error | undefined>(undefined)
 
   const handleConnect = async () => {
     try {
-      await magicConnect.activate()
+      await connector.activate()
       setError(undefined)
     } catch (error) {
       setError(error)

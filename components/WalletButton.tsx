@@ -1,19 +1,24 @@
 import { Button } from "@chakra-ui/react"
 import { MagicConnect } from "web3-react-magic"
+import { Connector } from "@web3-react/types"
 
 type WalletButtonProps = {
-  magicConnect: MagicConnect
+  connector: MagicConnect | Connector
 }
 
-const WalletButton = ({ magicConnect }: WalletButtonProps) => {
+const WalletButton = ({ connector }: WalletButtonProps) => {
   const handleOpenWallet = () => {
-    if (magicConnect.magic) {
-      magicConnect.magic.wallet.getInfo().then((walletInfo) => {
+    if (connector instanceof MagicConnect && connector.magic) {
+      connector.magic.wallet.getInfo().then((walletInfo) => {
         if (walletInfo?.walletType == "magic") {
-          magicConnect.magic.wallet.showUI().catch((err) => console.error(err))
+          connector.magic.wallet.showUI().catch((err) => console.error(err))
         }
       })
     }
+  }
+
+  if (!(connector instanceof MagicConnect)) {
+    return null
   }
 
   return (
