@@ -6,46 +6,29 @@ import { useEffect, useRef, useState } from "react"
 import { Status } from "../components/Status"
 import { Accounts } from "../components/Accounts"
 import Web3 from "web3"
+import { useWeb3React } from "@web3-react/core"
 import { getName } from "../utils"
 
-const [magicConnect, magicConnectHooks] = initializeConnector<MagicConnectType>(
-  (actions) =>
-    new MagicConnect({
-      actions,
-      options: {
-        apiKey: process.env.NEXT_PUBLIC_MAGICKEY,
-        networkOptions: {
-          rpcUrl: process.env.NEXT_PUBLIC_GOERLI_RPC,
-          chainId: 5,
-        },
-      },
-    })
-)
-
-const {
-  useChainId,
-  useAccounts,
-  useIsActivating,
-  useIsActive,
-  useProvider,
-  useENSNames,
-} = magicConnectHooks
-
 export default function Home() {
-  const chainId = useChainId()
-  const accounts = useAccounts()
-  const isActivating = useIsActivating()
-  const isActive = useIsActive()
-  const provider = useProvider()
-  const ENSNames = useENSNames(provider)
+  const {
+    connector,
+    accounts,
+    isActive,
+    ENSNames,
+    chainId,
+    isActivating,
+    provider,
+  } = useWeb3React()
 
-  console.log(`Connector is: ${getName(magicConnect)}`)
-  console.log(`Accounts are: ${accounts}`)
-  console.log(`Is active: ${isActive}`)
-  console.log(`ENS names: ${ENSNames}`)
-  console.log(`Chain ID: ${chainId}`)
-  console.log(`Is activating: ${isActivating}`)
-  console.log(`Provider: ${provider}`)
+  console.log(connector)
+
+  // console.log(`Priority Connector is: ${getName(connector)}`)
+  // console.log(`Accounts are: ${accounts}`)
+  // console.log(`Is active: ${isActive}`)
+  // console.log(`ENS names: ${ENSNames}`)
+  // console.log(`Chain ID: ${chainId}`)
+  // console.log(`Is activating: ${isActivating}`)
+  // console.log(`Provider: ${provider}`)
 
   const [web3, setWeb3] = useState(null)
   const [error, setError] = useState(undefined)
@@ -63,7 +46,7 @@ export default function Home() {
 
   const connect = async () => {
     try {
-      await magicConnect.activate()
+      await connector.activate()
       setError(undefined)
     } catch (error) {
       setError(error)
@@ -73,7 +56,11 @@ export default function Home() {
 
   const disconnect = async () => {
     try {
-      await magicConnect.deactivate()
+      if (connector?.deactivate) {
+        void connector.deactivate()
+      } else {
+        void connector.resetState()
+      }
       setError(undefined)
       refreshState()
       if (inputRef.current) {
@@ -81,6 +68,7 @@ export default function Home() {
       }
     } catch (error) {
       setError(error)
+      console.log(error)
     }
   }
 
@@ -93,16 +81,9 @@ export default function Home() {
   console.log(message)
 
   const signMessage = async () => {
-    // if (web3 && accounts) {
-    if (accounts) {
+    if (web3 && accounts) {
       try {
-        const signed = await provider.send("personal_sign", [
-          message,
-          accounts[0],
-          null,
-        ])
-
-        // const signed = await web3.eth.personal.sign(message, accounts[0], null)
+        const signed = await web3.eth.personal.sign(message, accounts[0], null)
         setSignature(signed)
       } catch (error) {
         setError(error)
