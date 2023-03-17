@@ -1,4 +1,13 @@
-import { Button, VStack, Text, HStack, Input, Box } from "@chakra-ui/react"
+import {
+  Button,
+  VStack,
+  Text,
+  HStack,
+  Input,
+  Box,
+  Link,
+} from "@chakra-ui/react"
+import { LinkIcon } from "@chakra-ui/icons"
 import { initializeConnector } from "@web3-react/core"
 import { MagicConnect } from "web3-react-magic"
 import type { MagicConnect as MagicConnectType } from "web3-react-magic"
@@ -6,7 +15,8 @@ import { useEffect, useRef, useState } from "react"
 import { Status } from "../components/Status"
 import { Accounts } from "../components/Accounts"
 import Web3 from "web3"
-import { getName } from "../utils"
+import { contractABI } from "../lib/abi"
+import { requestMintNFT } from "../lib/utils"
 
 const [magicConnect, magicConnectHooks] = initializeConnector<MagicConnectType>(
   (actions) =>
@@ -39,26 +49,6 @@ export default function Home() {
   const provider = useProvider()
   const ENSNames = useENSNames(provider)
 
-  const [user, setUser] = useState(null)
-
-  async function openWallet() {
-    if (magicConnect.magic) {
-      magicConnect.magic.wallet.getInfo().then(async (walletInfo) => {
-        if (walletInfo?.walletType == "magic") {
-          magicConnect.magic.wallet.showUI().catch((err) => console.error(err))
-        }
-      })
-    }
-  }
-
-  // console.log(`Connector is: ${getName(magicConnect)}`)
-  // console.log(`Accounts are: ${accounts}`)
-  // console.log(`Is active: ${isActive}`)
-  // console.log(`ENS names: ${ENSNames}`)
-  // console.log(`Chain ID: ${chainId}`)
-  // console.log(`Is activating: ${isActivating}`)
-  // console.log(`Provider: ${provider}`)
-
   const [web3, setWeb3] = useState(null)
   const [error, setError] = useState(undefined)
 
@@ -66,12 +56,35 @@ export default function Home() {
   const [message, setMessage] = useState("")
   const [signature, setSignature] = useState("")
 
-  // useEffect(() => {
-  //   if (isActive && magicConnect) {
-  //     //@ts-ignore
-  //     setWeb3(new Web3(magicConnect.magic.rpcProvider))
-  //   }
-  // }, [isActive, magicConnect])
+  const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
+  const [contract, setContract] = useState(null)
+  const [tokenID, setTokenID] = useState(null)
+
+  useEffect(() => {
+    if (isActive && magicConnect) {
+      //@ts-ignore
+      setWeb3(new Web3(magicConnect.magic.rpcProvider))
+    }
+  }, [isActive, magicConnect])
+
+  useEffect(() => {
+    if (web3 && isActive && magicConnect) {
+      setContract(new web3.eth.Contract(contractABI, contractAddress))
+    }
+  }, [web3])
+
+  async function requestMint() {
+    if (magicConnect.magic && contract) {
+      const res = await requestMintNFT(accounts[0], contract)
+      if (!res) {
+        console.log("Mint failed (or was canceled by the user).")
+        return
+      }
+      setTokenID(res.tokenId)
+      console.log(res.tokenId)
+      console.log(res.hash)
+    }
+  }
 
   const connect = async () => {
     try {
@@ -96,16 +109,26 @@ export default function Home() {
     }
   }
 
+  function openWallet() {
+    if (magicConnect.magic) {
+      magicConnect.magic.wallet.getInfo().then((walletInfo) => {
+        if (walletInfo?.walletType == "magic") {
+          magicConnect.magic.wallet.showUI().catch((err) => console.error(err))
+        }
+      })
+    }
+  }
+
   const refreshState = () => {
     setMessage("")
     setSignature("")
+    setTokenID(null)
   }
 
   const handleInput = (e) => setMessage(e.target.value)
   console.log(message)
 
   const signMessage = async () => {
-    // if (web3 && accounts) {
     if (accounts) {
       try {
         const signed = await provider.send("personal_sign", [
@@ -132,12 +155,34 @@ export default function Home() {
       <Accounts accounts={accounts} provider={provider} ENSNames={ENSNames} />
       <Status isActivating={isActivating} isActive={isActive} error={error} />
       {isActive ? (
-        <VStack>
-          <Button onClick={disconnect}>Disconnect</Button>
-          <Button onClick={openWallet}>Wallet</Button>
+        <VStack alignItems="center" justifyContent="center">
+          <Button onClick={disconnect} w={100}>
+            Disconnect
+          </Button>
+          <Button onClick={openWallet} w={100}>
+            Wallet
+          </Button>
+          <Button onClick={requestMint} w={100}>
+            Mint
+          </Button>
+
+          {tokenID && (
+            <HStack>
+              <Text>OpenSea</Text>
+              <Link
+                href={`https://testnets.opensea.io/assets/goerli/${contractAddress}/${tokenID}`}
+                isExternal
+                _hover={{ color: "blue.600" }}
+              >
+                <LinkIcon />
+              </Link>
+            </HStack>
+          )}
         </VStack>
       ) : (
-        <Button onClick={connect}>Connect</Button>
+        <Button onClick={connect} w={100}>
+          Connect
+        </Button>
       )}
 
       {isActive && (

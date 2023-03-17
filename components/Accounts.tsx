@@ -46,7 +46,6 @@ export function Accounts({
 
   return (
     <VStack>
-      <Text>Accounts:</Text>
       <Text as="b">
         {accounts.length === 0 ? (
           "None"
