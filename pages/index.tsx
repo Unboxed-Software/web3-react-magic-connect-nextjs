@@ -39,13 +39,25 @@ export default function Home() {
   const provider = useProvider()
   const ENSNames = useENSNames(provider)
 
-  console.log(`Connector is: ${getName(magicConnect)}`)
-  console.log(`Accounts are: ${accounts}`)
-  console.log(`Is active: ${isActive}`)
-  console.log(`ENS names: ${ENSNames}`)
-  console.log(`Chain ID: ${chainId}`)
-  console.log(`Is activating: ${isActivating}`)
-  console.log(`Provider: ${provider}`)
+  const [user, setUser] = useState(null)
+
+  async function openWallet() {
+    if (magicConnect.magic) {
+      magicConnect.magic.wallet.getInfo().then(async (walletInfo) => {
+        if (walletInfo?.walletType == "magic") {
+          magicConnect.magic.wallet.showUI().catch((err) => console.error(err))
+        }
+      })
+    }
+  }
+
+  // console.log(`Connector is: ${getName(magicConnect)}`)
+  // console.log(`Accounts are: ${accounts}`)
+  // console.log(`Is active: ${isActive}`)
+  // console.log(`ENS names: ${ENSNames}`)
+  // console.log(`Chain ID: ${chainId}`)
+  // console.log(`Is activating: ${isActivating}`)
+  // console.log(`Provider: ${provider}`)
 
   const [web3, setWeb3] = useState(null)
   const [error, setError] = useState(undefined)
@@ -102,6 +114,11 @@ export default function Home() {
           null,
         ])
 
+        // const signed = await provider.provider.request({
+        //   method: "personal_sign",
+        //   params: [message, accounts[0], null],
+        // })
+
         // const signed = await web3.eth.personal.sign(message, accounts[0], null)
         setSignature(signed)
       } catch (error) {
@@ -115,7 +132,10 @@ export default function Home() {
       <Accounts accounts={accounts} provider={provider} ENSNames={ENSNames} />
       <Status isActivating={isActivating} isActive={isActive} error={error} />
       {isActive ? (
-        <Button onClick={disconnect}>Disconnect</Button>
+        <VStack>
+          <Button onClick={disconnect}>Disconnect</Button>
+          <Button onClick={openWallet}>Wallet</Button>
+        </VStack>
       ) : (
         <Button onClick={connect}>Connect</Button>
       )}
