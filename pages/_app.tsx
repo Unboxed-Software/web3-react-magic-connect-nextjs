@@ -9,14 +9,14 @@ import {
   magicConnect,
 } from "../connectors/magic-connect"
 
-// const connectors: [MetaMask | MagicConnect, Web3ReactHooks][] = [
-//   [metaMask, metaMaskHooks],
-//   [magicConnect, magicConnectHooks],
-// ]
-
-const connectors: [MagicConnect, Web3ReactHooks][] = [
+const connectors: [MetaMask | MagicConnect, Web3ReactHooks][] = [
+  [metaMask, metaMaskHooks],
   [magicConnect, magicConnectHooks],
 ]
+
+// const connectors: [MagicConnect, Web3ReactHooks][] = [
+//   [magicConnect, magicConnectHooks],
+// ]
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

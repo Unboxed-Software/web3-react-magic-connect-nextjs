@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 
 import Web3 from "web3"
 import { contractABI } from "../lib/abi"
-import { contractAddress, getName } from "../lib/utils"
+import { contractAddress, getName, useContract } from "../lib/utils"
 import { useWeb3React } from "@web3-react/core"
 import { MagicConnect } from "web3-react-magic"
 
@@ -26,9 +26,9 @@ export default function Home() {
     provider,
   } = useWeb3React()
 
+  // const contract = useContract(isActive, connector)
   const [contract, setContract] = useState(null)
 
-  // Not sure how to set this up without a useEffect
   useEffect(() => {
     let web3 = null
 
@@ -37,7 +37,8 @@ export default function Home() {
         // @ts-ignore
         web3 = new Web3(connector.magic.rpcProvider)
       } else {
-        // TODO: How to support other connectors
+        // @ts-ignore
+        web3 = new Web3(connector.provider)
       }
     }
 
@@ -63,15 +64,8 @@ export default function Home() {
           <SignMessage provider={provider} accounts={accounts} />
         </VStack>
       ) : (
-        <ConnectButton connector={connector} />
+        <ConnectButton />
       )}
     </VStack>
   )
-}
-function usePriorityConnector() {
-  throw new Error("Function not implemented.")
-}
-
-function usePriorityProvider() {
-  throw new Error("Function not implemented.")
 }
