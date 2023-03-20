@@ -1,11 +1,7 @@
 import { VStack } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
 
-import Web3 from "web3"
-import { contractABI } from "../lib/abi"
-import { contractAddress, getName, useContract } from "../lib/utils"
 import { useWeb3React } from "@web3-react/core"
-import { MagicConnect } from "web3-react-magic"
+import { contractAddress, useContract } from "../utils/useContract"
 
 import { Status } from "../components/Status"
 import { Accounts } from "../components/Accounts"
@@ -26,27 +22,7 @@ export default function Home() {
     provider,
   } = useWeb3React()
 
-  // const contract = useContract(isActive, connector)
-  const [contract, setContract] = useState(null)
-
-  useEffect(() => {
-    let web3 = null
-
-    if (isActive) {
-      if (connector instanceof MagicConnect) {
-        // @ts-ignore
-        web3 = new Web3(connector.magic.rpcProvider)
-      } else {
-        // @ts-ignore
-        web3 = new Web3(connector.provider)
-      }
-    }
-
-    if (web3) {
-      const contract = new web3.eth.Contract(contractABI, contractAddress)
-      setContract(contract)
-    }
-  }, [isActive, connector])
+  const contract = useContract(isActive, connector)
 
   return (
     <VStack justifyContent="center" alignItems="center" height="100vh">

@@ -2,7 +2,7 @@ import { Button, HStack, Link, Text } from "@chakra-ui/react"
 import { useState } from "react"
 import { Contract } from "web3-eth-contract"
 import { LinkIcon } from "@chakra-ui/icons"
-import { requestMintNFT } from "../lib/utils"
+import { requestMintNFT } from "../utils/utils"
 
 type MintButtonProps = {
   accounts: string[]
