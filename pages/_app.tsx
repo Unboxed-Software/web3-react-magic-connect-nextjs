@@ -3,16 +3,23 @@ import { ChakraProvider } from "@chakra-ui/react"
 import { Web3ReactHooks, Web3ReactProvider } from "@web3-react/core"
 import { MetaMask } from "@web3-react/metamask"
 import { MagicConnect } from "web3-react-magic"
+import { WalletConnect } from "@web3-react/walletconnect"
 import { hooks as metaMaskHooks, metaMask } from "../connectors/metaMask"
 import {
   hooks as magicConnectHooks,
   magicConnect,
-} from "../connectors/magic-connect"
+} from "../connectors/magicConnect"
+import {
+  hooks as walletConnectHooks,
+  walletConnect,
+} from "../connectors/walletConnect"
 
-const connectors: [MetaMask | MagicConnect, Web3ReactHooks][] = [
-  [metaMask, metaMaskHooks],
-  [magicConnect, magicConnectHooks],
-]
+const connectors: [MetaMask | MagicConnect | WalletConnect, Web3ReactHooks][] =
+  [
+    [metaMask, metaMaskHooks],
+    [magicConnect, magicConnectHooks],
+    [walletConnect, walletConnectHooks],
+  ]
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

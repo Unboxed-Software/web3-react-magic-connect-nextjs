@@ -12,8 +12,9 @@ import {
 } from "@chakra-ui/react"
 import { useState } from "react"
 import { Connector } from "@web3-react/types"
-import { magicConnect } from "../connectors/magic-connect"
+import { magicConnect } from "../connectors/magicConnect"
 import { metaMask } from "../connectors/metaMask"
+import { walletConnect } from "../connectors/walletConnect"
 
 const ConnectButton = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -46,6 +47,9 @@ const ConnectButton = () => {
               </Button>
               <Button onClick={() => handleConnect(magicConnect)} w="65%">
                 Magic Connect
+              </Button>
+              <Button onClick={() => handleConnect(walletConnect)} w="65%">
+                Wallet Connect
               </Button>
             </VStack>
           </ModalBody>
