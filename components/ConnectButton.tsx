@@ -10,7 +10,7 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Connector } from "@web3-react/types"
 import { magicConnect } from "../connectors/magicConnect"
 import { metaMask } from "../connectors/metaMask"
@@ -29,6 +29,13 @@ const ConnectButton = () => {
       console.log(error)
     }
   }
+
+  // Test eagerly connecting to Magic Connect
+  useEffect(() => {
+    void magicConnect.connectEagerly().catch(() => {
+      console.debug("Failed to connect eagerly to magic connect")
+    })
+  }, [])
 
   return (
     <>
