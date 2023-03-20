@@ -17,7 +17,7 @@ interface TxData {
   tokenId?: number
 }
 
-export async function requestMintNFT(address, contract) {
+export async function requestMintNFT(address, contract, provider) {
   console.log(`Request to mint an NFT to address ${address}...`)
 
   let txData: TxData = {}
@@ -26,11 +26,21 @@ export async function requestMintNFT(address, contract) {
     const name = await contract.methods.name().call()
     // console.log("Name:", name);
 
+    // check the balance of the address
+    const balance = await provider.getBalance(address)
+    console.log("Balance:", balance.toString())
+
     // estimate the amount of gas required
     const gas = await contract.methods
       .safeMint(address)
       .estimateGas({ from: address })
     console.log(`Estimated gas: ${gas}`)
+
+    // check if the address has enough funds to cover the gas
+    if (balance < gas) {
+      alert("Insufficient funds to cover the gas fee")
+      return
+    }
 
     // construct and send the mint request to the blockchain
     const receipt = await contract.methods

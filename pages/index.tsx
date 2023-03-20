@@ -36,6 +36,7 @@ export default function Home() {
             accounts={accounts}
             contract={contract}
             contractAddress={contractAddress}
+            provider={provider}
           />
           <SignMessage provider={provider} accounts={accounts} />
         </VStack>
