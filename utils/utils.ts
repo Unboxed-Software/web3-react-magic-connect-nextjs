@@ -28,6 +28,7 @@ export async function requestMintNFT(address, contract, provider) {
 
     // check the balance of the address
     const balance = await provider.getBalance(address)
+    console.log(address)
     console.log("Balance:", balance.toString())
 
     // estimate the amount of gas required
@@ -36,8 +37,16 @@ export async function requestMintNFT(address, contract, provider) {
       .estimateGas({ from: address })
     console.log(`Estimated gas: ${gas}`)
 
-    // check if the address has enough funds to cover the gas
-    if (balance < gas) {
+    // Get the current gas price
+    const gasPrice = await provider.getGasPrice()
+    console.log("Gas price:", gasPrice.toString())
+
+    // Calculate the total cost of the transaction (gas * gasPrice)
+    const transactionCost = gasPrice.mul(gas)
+    console.log("Transaction cost:", transactionCost.toString())
+
+    // Check if the address has enough funds to cover the gas fee
+    if (balance.lt(transactionCost)) {
       alert("Insufficient funds to cover the gas fee")
       return
     }
