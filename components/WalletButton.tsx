@@ -1,49 +1,41 @@
 import { Button } from "@chakra-ui/react"
 import { MagicConnect } from "web3-react-magic"
 import { Connector } from "@web3-react/types"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 interface WalletButtonProps {
   connector: MagicConnect | Connector
 }
 
 const WalletButton = ({ connector }: WalletButtonProps) => {
+  // Check if connector is an instance of MagicConnect
+  if (!(connector instanceof MagicConnect)) return null
+
+  // State to determine if Magic Connect wallet button should be shown
   const [showButton, setShowButton] = useState(false)
 
-  const handleOpenWallet = async () => {
-    if (showButton) {
-      try {
-        // @ts-ignore
-        await connector.magic.wallet.showUI()
-      } catch (error) {
-        console.error(error)
-      }
-    }
+  // Function to open Magic Connect wallet
+  const handleOpenWallet = useCallback(async () => {
+    await connector.magic.wallet.showUI()
+  }, [connector])
+
+  // Function to check wallet type is "magic" to determine if button should be shown
+  const checkWalletType = async () => {
+    const walletInfo = await connector.magic.wallet.getInfo()
+    setShowButton(walletInfo?.walletType === "magic")
   }
 
+  // Check wallet type on mount and when connector changes
   useEffect(() => {
-    const checkWalletType = async () => {
-      const isMagicConnect =
-        connector instanceof MagicConnect && connector.magic
-
-      if (isMagicConnect) {
-        const walletInfo = await connector.magic.wallet.getInfo()
-        setShowButton(walletInfo?.walletType === "magic")
-      } else {
-        setShowButton(false)
-      }
-    }
-
     checkWalletType()
   }, [connector])
 
-  if (!showButton) return null
-
-  return (
+  // Render button if showButton is true, otherwise render null
+  return showButton ? (
     <Button onClick={handleOpenWallet} w={100}>
       Wallet
     </Button>
-  )
+  ) : null
 }
 
 export default WalletButton

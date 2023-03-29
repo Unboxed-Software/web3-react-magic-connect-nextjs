@@ -14,6 +14,9 @@ import {
   walletConnect,
 } from "../connectors/walletConnect"
 
+// Define an array of web3react connectors and their hooks
+// This is simply  an example of how to setup multiple connectors
+// The MagicConnect connector already supports connecting with MetaMask and WalletConnect using the Magic Connect Modal
 const connectors: [MetaMask | MagicConnect | WalletConnect, Web3ReactHooks][] =
   [
     [metaMask, metaMaskHooks],
@@ -21,6 +24,7 @@ const connectors: [MetaMask | MagicConnect | WalletConnect, Web3ReactHooks][] =
     [walletConnect, walletConnectHooks],
   ]
 
+// Wrap the app in the ChakraProvider and Web3ReactProvider passing in the connectors
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider>

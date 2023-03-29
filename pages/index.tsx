@@ -12,6 +12,7 @@ import ConnectButton from "../components/ConnectButton"
 import DisconnectButton from "../components/DisconnectButton"
 
 export default function Home() {
+  // Get variables from Web3react context using the useWeb3React hook
   const {
     connector,
     accounts,
@@ -22,6 +23,7 @@ export default function Home() {
     provider,
   } = useWeb3React()
 
+  // Get the NFT minting contract instance if Web3React is active
   const contract = useContract(isActive, connector)
 
   return (

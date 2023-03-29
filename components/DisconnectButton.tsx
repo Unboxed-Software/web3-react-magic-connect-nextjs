@@ -9,6 +9,7 @@ type DisconnectButtonProps = {
 const DisconnectButton = ({ connector }: DisconnectButtonProps) => {
   const [error, setError] = useState<Error | undefined>(undefined)
 
+  // Function to handle disconnection
   const handleDisconnect = async () => {
     try {
       if (connector?.deactivate) {

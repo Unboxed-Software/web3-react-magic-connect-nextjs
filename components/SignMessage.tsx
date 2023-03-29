@@ -6,15 +6,20 @@ type SignMessageProps = {
   accounts: string[]
 }
 
+// Component to test signing a message with the connected wallet
 const SignMessage = ({ provider, accounts }: SignMessageProps) => {
+  // Initialize state for message and signature
   const [message, setMessage] = useState("")
   const [signature, setSignature] = useState("")
 
+  // Initialize a ref for the input field
   const inputRef = useRef(null)
 
+  // Handle input change
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) =>
     setMessage(e.target.value)
 
+  // Sign the message
   const signMessage = async () => {
     if (accounts) {
       try {
@@ -40,6 +45,7 @@ const SignMessage = ({ provider, accounts }: SignMessageProps) => {
         padding="10px"
       >
         <VStack>
+          {/* Input field for message */}
           <Input
             ref={inputRef}
             value={message}
@@ -48,6 +54,7 @@ const SignMessage = ({ provider, accounts }: SignMessageProps) => {
             onChange={handleInput}
             w="140px"
           />
+          {/* Button to sign the message */}
           <Button onClick={signMessage} isDisabled={!message}>
             Sign Message
           </Button>
