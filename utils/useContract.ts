@@ -8,13 +8,6 @@ import { contractABI } from "./abi"
 
 export const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
 
-const createWeb3Instance = (connector: Connector) =>
-  connector instanceof MagicConnect
-    ? // @ts-ignore
-      new Web3(connector.magic.rpcProvider)
-    : // @ts-ignore
-      new Web3(connector.provider)
-
 export const useContract = (isActive: boolean, connector: Connector) => {
   const [contract, setContract] = useState<any>(null)
 
@@ -24,7 +17,8 @@ export const useContract = (isActive: boolean, connector: Connector) => {
     }
 
     try {
-      const web3 = createWeb3Instance(connector)
+      // @ts-ignore
+      const web3 = new Web3(connector.provider)
       const contract = new web3.eth.Contract(
         // @ts-ignore
         contractABI,
