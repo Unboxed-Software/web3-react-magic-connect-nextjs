@@ -32,3 +32,7 @@ export const [magicConnect, hooks] = initializeConnector<MagicConnect>(
     })
 )
 ```
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/75003086/229230807-933b338c-a6b7-4b85-a1ef-aa9e0e863dae.gif" alt="magic" width="500"/>
+</p>
