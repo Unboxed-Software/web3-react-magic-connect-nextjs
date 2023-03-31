@@ -1,9 +1,8 @@
 import { initializeConnector } from "@web3-react/core"
 import { MagicConnect } from "web3-react-magic"
-import type { MagicConnect as MagicConnectType } from "web3-react-magic"
 
 // Initialize the MagicConnect connector
-export const [magicConnect, hooks] = initializeConnector<MagicConnectType>(
+export const [magicConnect, hooks] = initializeConnector<MagicConnect>(
   (actions) =>
     new MagicConnect({
       actions,
