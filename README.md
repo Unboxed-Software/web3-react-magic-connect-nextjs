@@ -7,7 +7,7 @@ It includes a wallet selector modal, message signing, and NFT minting.
 
 1. Clone this repo
 2. Install dependencies: `npm install`
-3. Rename `.env.example` to `.env` and replace variables with your own. You can get you Magic Connect API Key by creating an account [here](https://magic.link/).
+3. Rename `.env.example` to `.env` and replace variables with your own. You can get your own Magic Connect API Key by creating an account [here](https://magic.link/).
 4. Run the development server: `npm run dev`
 
 ## Magic Connect Connector
@@ -31,3 +31,7 @@ export const [magicConnect, hooks] = initializeConnector<MagicConnect>(
     })
 )
 ```
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/75003086/229230807-933b338c-a6b7-4b85-a1ef-aa9e0e863dae.gif" alt="magic" width="500"/>
+</p>
