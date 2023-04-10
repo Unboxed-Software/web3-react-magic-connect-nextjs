@@ -37,7 +37,6 @@ export default function Home() {
           <MintButton
             accounts={accounts}
             contract={contract}
-            contractAddress={contractAddress}
             provider={provider}
           />
           <SignMessage provider={provider} accounts={accounts} />

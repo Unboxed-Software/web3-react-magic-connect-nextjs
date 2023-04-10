@@ -14,7 +14,6 @@ import { useEffect, useState } from "react"
 import { Connector } from "@web3-react/types"
 import { magicConnect } from "../connectors/magicConnect"
 import { metaMask } from "../connectors/metaMask"
-import { walletConnect } from "../connectors/walletConnect"
 
 const ConnectButton = () => {
   // Manage modal state
@@ -61,9 +60,6 @@ const ConnectButton = () => {
               </Button>
               <Button onClick={() => handleConnect(magicConnect)} w="65%">
                 Magic Connect
-              </Button>
-              <Button onClick={() => handleConnect(walletConnect)} w="65%">
-                Wallet Connect
               </Button>
             </VStack>
           </ModalBody>

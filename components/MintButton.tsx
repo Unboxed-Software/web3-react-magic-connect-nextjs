@@ -8,18 +8,12 @@ import type { Web3ReactHooks } from "@web3-react/core"
 type MintButtonProps = {
   accounts: string[]
   contract: Contract | null
-  contractAddress: string
   provider: ReturnType<Web3ReactHooks["useProvider"]>
 }
 
-const MintButton = ({
-  accounts,
-  contract,
-  contractAddress,
-  provider,
-}: MintButtonProps) => {
-  // State to keep track of the minted token ID
-  const [tokenID, setTokenID] = useState<number | null>(null)
+const MintButton = ({ accounts, contract, provider }: MintButtonProps) => {
+  // State to keep track of transaction hash
+  const [transactionHash, setTransactionHash] = useState<string | null>(null)
   // State to keep track of loading status
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -34,19 +28,20 @@ const MintButton = ({
         console.log("Mint failed (or was canceled by the user).")
         return
       }
-      // Set the token ID in state
-      setTokenID(res.tokenId)
+      // Set the transaction hash in state
+      setTransactionHash(res.hash)
       console.log(res.tokenId)
       console.log(res.hash)
     }
   }
 
-  // Display OpenSea link if token ID is available
-  const openSeaLink = tokenID ? (
+  // Display Etherscan link once transactionHash is available
+  // Using Etherscan since OpenSea doesn't currently support Sepolia
+  const etherscanLink = transactionHash ? (
     <HStack>
-      <Text>OpenSea</Text>
+      <Text>Etherscan</Text>
       <Link
-        href={`https://testnets.opensea.io/assets/goerli/${contractAddress}/${tokenID}`}
+        href={`https://sepolia.etherscan.io/tx/${transactionHash}`}
         isExternal
         _hover={{ color: "blue.600" }}
       >
@@ -63,8 +58,8 @@ const MintButton = ({
       </Button>
       {/* Spinner while loading */}
       {isLoading ? <Spinner /> : null}
-      {/* OpenSea link */}
-      {openSeaLink}
+      {/* Etherscan link */}
+      {etherscanLink}
     </>
   )
 }
