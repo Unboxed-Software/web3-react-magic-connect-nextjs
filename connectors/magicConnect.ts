@@ -9,8 +9,9 @@ export const [magicConnect, hooks] = initializeConnector<MagicConnect>(
       options: {
         apiKey: process.env.NEXT_PUBLIC_MAGICKEY, // Magic Connect Publishable API key
         networkOptions: {
-          rpcUrl: process.env.NEXT_PUBLIC_SEPOLIA_RPC, // Sepolia Testnet RPC URL
-          chainId: 11155111, // Chain ID for the Sepolia network
+          rpcUrl:
+            "https://eth-goerli.g.alchemy.com/v2/3jKhhva6zBqwp_dnwPlF4d0rFZhu2pjD/",
+          chainId: 5,
         },
       },
     })

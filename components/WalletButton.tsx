@@ -16,12 +16,12 @@ const WalletButton = ({ connector }: WalletButtonProps) => {
 
   // Function to open Magic Connect wallet
   const handleOpenWallet = useCallback(async () => {
-    await connector.magic.wallet.showUI()
+    await connector.magic?.wallet.showUI()
   }, [connector])
 
   // Function to check wallet type is "magic" to determine if button should be shown
   const checkWalletType = async () => {
-    const walletInfo = await connector.magic.wallet.getInfo()
+    const walletInfo = await connector.magic?.wallet.getInfo()
     setShowButton(walletInfo?.walletType === "magic")
   }
 

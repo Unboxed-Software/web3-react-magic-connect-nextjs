@@ -14,8 +14,12 @@ import { useEffect, useState } from "react"
 import { Connector } from "@web3-react/types"
 import { magicConnect } from "../connectors/magicConnect"
 import { metaMask } from "../connectors/metaMask"
+import { getAddChainParameters } from "../chains"
 
-const ConnectButton = () => {
+const ConnectButton = ({ selectedChainId }) => {
+  console.log("selectedChainId", selectedChainId)
+  // const chain = getAddChainParameters(selectedChainId)
+  // console.log(chain)
   // Manage modal state
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -24,7 +28,9 @@ const ConnectButton = () => {
   // Handle connection to wallet using selected connector
   const handleConnect = async (connector: Connector) => {
     try {
-      await connector.activate()
+      // const chain = getAddChainParameters(selectedChainId)
+      // console.log(chain)
+      await connector.activate(getAddChainParameters(selectedChainId))
       setError(undefined)
     } catch (error) {
       setError(error)
@@ -32,12 +38,12 @@ const ConnectButton = () => {
     }
   }
 
-  // Test eagerly connecting to Magic Connect
-  useEffect(() => {
-    void magicConnect.connectEagerly().catch(() => {
-      console.debug("Failed to connect eagerly to magic connect")
-    })
-  }, [])
+  // // Test eagerly connecting to Magic Connect
+  // useEffect(() => {
+  //   void magicConnect.connectEagerly().catch(() => {
+  //     console.debug("Failed to connect eagerly to magic connect")
+  //   })
+  // }, [])
 
   return (
     <>
