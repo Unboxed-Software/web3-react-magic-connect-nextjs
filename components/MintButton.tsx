@@ -25,13 +25,13 @@ const MintButton = ({ accounts, contract, provider }: MintButtonProps) => {
       const res = await requestMintNFT(accounts[0], contract, provider)
       setIsLoading(false)
       if (!res) {
-        console.log("Mint failed (or was canceled by the user).")
+        // console.log("Mint failed (or was canceled by the user).")
         return
       }
       // Set the transaction hash in state
       setTransactionHash(res.hash)
-      console.log(res.tokenId)
-      console.log(res.hash)
+      // console.log(res.tokenId)
+      // console.log(res.hash)
     }
   }
 

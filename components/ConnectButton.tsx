@@ -17,7 +17,7 @@ import { metaMask } from "../connectors/metaMask"
 import { getAddChainParameters } from "../chains"
 
 const ConnectButton = ({ selectedChainId }) => {
-  console.log("selectedChainId", selectedChainId)
+  // console.log("selectedChainId", selectedChainId)
   // const chain = getAddChainParameters(selectedChainId)
   // console.log(chain)
   // Manage modal state
@@ -37,13 +37,6 @@ const ConnectButton = ({ selectedChainId }) => {
       console.log(error)
     }
   }
-
-  // // Test eagerly connecting to Magic Connect
-  // useEffect(() => {
-  //   void magicConnect.connectEagerly().catch(() => {
-  //     console.debug("Failed to connect eagerly to magic connect")
-  //   })
-  // }, [])
 
   return (
     <>

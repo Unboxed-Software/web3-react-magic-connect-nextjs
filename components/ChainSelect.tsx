@@ -12,7 +12,7 @@ function ChainSelect({ connector, chainId, onSelect, isActive }) {
 
   const handleSelectChange = (event) => {
     const selectedChainId = event.target.value
-    console.log("selectedChainId", selectedChainId)
+    // console.log("selectedChainId", selectedChainId)
     onSelect(selectedChainId) // Call the onSelect prop with the selected chainId
 
     if (isActive) {

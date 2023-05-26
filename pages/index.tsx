@@ -1,5 +1,5 @@
 import { VStack } from "@chakra-ui/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import { useWeb3React } from "@web3-react/core"
 import { useContract } from "../utils/useContract"
@@ -14,6 +14,7 @@ import DisconnectButton from "../components/DisconnectButton"
 
 import { Chain } from "../components/Chain"
 import ChainSelect from "../components/ChainSelect"
+import { magicConnect } from "../connectors/magicConnect"
 
 export default function Home() {
   // Get variables from Web3react context using the useWeb3React hook
@@ -31,6 +32,13 @@ export default function Home() {
   const contract = useContract(isActive, connector)
 
   const [selectedChainId, setSelectedChainId] = useState(chainId)
+
+  // Test eagerly connecting to Magic Connect
+  useEffect(() => {
+    void magicConnect.connectEagerly().catch(() => {
+      console.debug("Failed to connect eagerly to magic connect")
+    })
+  }, [])
 
   return (
     <VStack justifyContent="center" alignItems="center" height="100vh">

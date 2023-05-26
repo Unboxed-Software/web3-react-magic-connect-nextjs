@@ -31,7 +31,7 @@ export const useContract = (isActive: boolean, connector: Connector) => {
       // Set the contract state to the new contract instance
       setContract(newContract)
     } catch (error) {
-      console.log("Failed to create contract", error)
+      // console.log("Failed to create contract", error)
     }
   }
 
