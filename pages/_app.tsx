@@ -2,7 +2,7 @@ import type { AppProps } from "next/app"
 import { ChakraProvider } from "@chakra-ui/react"
 import { Web3ReactHooks, Web3ReactProvider } from "@web3-react/core"
 import { MetaMask } from "@web3-react/metamask"
-import { MagicConnect } from "web3-react-magic"
+import { MagicConnect } from "@magiclabs/web3-react"
 import { hooks as metaMaskHooks, metaMask } from "../connectors/metaMask"
 import {
   hooks as magicConnectHooks,

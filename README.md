@@ -1,7 +1,7 @@
 ## Next.js - web3-react Magic Connect Example
 
-This is a minimal implementation of the web3-react Magic Connect Connector in Next.js.
-It includes a wallet selector modal, message signing, and NFT minting.
+This is a minimal implementation of the `@magiclabs/web3-react` Magic Connect Connector in Next.js.
+It includes a wallet selector modal, network switching, message signing, and NFT minting. Note that the NFT contract is only deployed and implemented for Sepolia.
 
 ## Getting started
 
@@ -14,7 +14,7 @@ It includes a wallet selector modal, message signing, and NFT minting.
 
 ```ts
 import { initializeConnector } from "@web3-react/core"
-import { MagicConnect } from "web3-react-magic"
+import { MagicConnect } from "@magiclabs/web3-react"
 
 // Initialize the MagicConnect connector
 export const [magicConnect, hooks] = initializeConnector<MagicConnect>(
@@ -24,14 +24,10 @@ export const [magicConnect, hooks] = initializeConnector<MagicConnect>(
       options: {
         apiKey: process.env.NEXT_PUBLIC_MAGICKEY, // Magic Connect Publishable API key
         networkOptions: {
-          rpcUrl: process.env.NEXT_PUBLIC_SEPOLIA_RPC, // Sepolia Testnet RPC URL
+          rpcUrl: "https://rpc2.sepolia.org", // Sepolia Testnet RPC URL
           chainId: 11155111, // Chain ID for the Sepolia network
         },
       },
     })
 )
 ```
-
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/75003086/229230807-933b338c-a6b7-4b85-a1ef-aa9e0e863dae.gif" alt="magic" width="500"/>
-</p>

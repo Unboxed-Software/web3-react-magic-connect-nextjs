@@ -10,10 +10,7 @@ interface TxData {
 
 // Define the function to request the minting of an NFT
 export async function requestMintNFT(address, contract, provider) {
-  // console.log(`Request to mint an NFT to address ${address}...`)
-
   try {
-    // Use Promise.all() to execute multiple promises concurrently and retrieve their results
     const [name, balance, gas, gasPrice] = await Promise.all([
       contract.methods.name().call(),
       provider.getBalance(address),
@@ -21,16 +18,8 @@ export async function requestMintNFT(address, contract, provider) {
       provider.getGasPrice(),
     ])
 
-    // // Log info to the console
-    // console.log("Name:", name)
-    // console.log("Address:", address)
-    // console.log("Balance:", balance.toString())
-    // console.log(`Estimated gas: ${gas}`)
-    // console.log("Gas price:", gasPrice.toString())
-
     // Calculate the estimated transaction cost based on gas and gas price
     const transactionCost = gasPrice.mul(gas)
-    // console.log("Transaction cost:", transactionCost.toString())
 
     // If the balance is less than the transaction cost, display an alert and return
     if (balance.lt(transactionCost)) {
@@ -45,16 +34,10 @@ export async function requestMintNFT(address, contract, provider) {
         from: address,
         gas,
       })
-      .on("transactionHash", (hash) => {
-        // console.log("Transaction hash:", hash)
-      })
-
-    // Log the transaction receipt to the console
-    // console.log("Transaction receipt:", receipt)
+      .on("transactionHash", (hash) => {})
 
     // Retrieve the minted tokenId from the transaction receipt events
     const tokenId = receipt?.events?.Transfer?.returnValues?.tokenId
-    // console.log("Minted tokenId:", tokenId)
 
     // Create the transaction data object with the transaction hash and tokenId
     const txData: TxData = {

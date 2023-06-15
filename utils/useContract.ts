@@ -30,9 +30,7 @@ export const useContract = (isActive: boolean, connector: Connector) => {
 
       // Set the contract state to the new contract instance
       setContract(newContract)
-    } catch (error) {
-      // console.log("Failed to create contract", error)
-    }
+    } catch (error) {}
   }
 
   // Call the createContract function when the component mounts or when the Web3React state changes

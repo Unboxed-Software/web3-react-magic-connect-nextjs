@@ -10,16 +10,13 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Connector } from "@web3-react/types"
 import { magicConnect } from "../connectors/magicConnect"
 import { metaMask } from "../connectors/metaMask"
 import { getAddChainParameters } from "../chains"
 
 const ConnectButton = ({ selectedChainId }) => {
-  // console.log("selectedChainId", selectedChainId)
-  // const chain = getAddChainParameters(selectedChainId)
-  // console.log(chain)
   // Manage modal state
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -28,8 +25,6 @@ const ConnectButton = ({ selectedChainId }) => {
   // Handle connection to wallet using selected connector
   const handleConnect = async (connector: Connector) => {
     try {
-      // const chain = getAddChainParameters(selectedChainId)
-      // console.log(chain)
       await connector.activate(getAddChainParameters(selectedChainId))
       setError(undefined)
     } catch (error) {

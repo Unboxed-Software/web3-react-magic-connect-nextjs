@@ -1,5 +1,5 @@
 import { Button } from "@chakra-ui/react"
-import { MagicConnect } from "web3-react-magic"
+import { MagicConnect } from "@magiclabs/web3-react"
 import { Connector } from "@web3-react/types"
 import { useCallback, useEffect, useState } from "react"
 
