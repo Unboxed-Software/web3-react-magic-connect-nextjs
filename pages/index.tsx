@@ -14,7 +14,6 @@ import DisconnectButton from "../components/DisconnectButton"
 
 import { Chain } from "../components/Chain"
 import ChainSelect from "../components/ChainSelect"
-import { magicConnect } from "../connectors/magicConnect"
 
 export default function Home() {
   // Get variables from Web3react context using the useWeb3React hook
@@ -35,7 +34,7 @@ export default function Home() {
 
   // Test eagerly connecting to Magic Connect
   useEffect(() => {
-    void magicConnect.connectEagerly().catch(() => {
+    ;(connector.connectEagerly() as Promise<void>).catch(() => {
       console.debug("Failed to connect eagerly to magic connect")
     })
   }, [])
